@@ -1,0 +1,41 @@
+{
+    "name": "kostaspt/namespace-checker",
+    "description": "Find wrong namespaces in your PHP projects",
+    "type": "application",
+    "license": "MIT",
+    "keywords": ["namespace"],
+    "authors": [
+        {
+            "name": "Konstantinos Pittas",
+            "email": "konstantinos.pittas@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "spatie/regex": "^1.1",
+        "symfony/console": "^3.3",
+        "symfony/finder": "^3.3",
+        "tightenco/collect": "^5.4"
+    },
+    "require-dev": {
+        "larapack/dd": "^1.1",
+        "mockery/mockery": "^0.9",
+        "phpunit/phpunit": "^6.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "NamespaceChecker\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "NamespaceChecker\\Tests\\": "tests/"
+        }
+    },
+    "bin": [
+        "bin/namespace-checker"
+    ],
+    "config": {
+        "sort-packages": true
+    }
+}

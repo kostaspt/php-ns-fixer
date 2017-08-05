@@ -13,15 +13,16 @@ class CheckerTest extends TestCase
     /**
      * @param string $content
      * @param string $relativePath
-     * @return \Mockery\MockInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function mockFile(string $content, string $relativePath = 'Foo\Bar'): \Mockery\MockInterface
+    private function mockFile(string $content, string $relativePath = 'Foo\Bar')
     {
-        $file = Mockery::mock(SplFileInfo::class);
-        $file->shouldReceive('getRelativePath')->andReturn($relativePath);
-        $file->shouldReceive('getContents')->andReturn($content);
+        $stub = $this->createMock(SplFileInfo::class);
 
-        return $file;
+        $stub->method('getRelativePath')->willReturn($relativePath);
+        $stub->method('getContents')->willReturn($content);
+
+        return $stub;
     }
 
     /**

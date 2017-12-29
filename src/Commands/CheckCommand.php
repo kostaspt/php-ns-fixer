@@ -1,9 +1,9 @@
 <?php
 
-namespace NamespaceChecker\Commands;
+namespace PhpNsFixer\Commands;
 
-use NamespaceChecker\Checker;
-use NamespaceChecker\Result;
+use PhpNsFixer\Checker;
+use PhpNsFixer\Result;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;

@@ -25,16 +25,16 @@
     },
     "autoload": {
         "psr-4": {
-            "NamespaceChecker\\": "src/"
+            "PhpNsFixer\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "NamespaceChecker\\Tests\\": "tests/"
+            "PhpNsFixer\\Tests\\": "tests/"
         }
     },
     "bin": [
-        "bin/namespace-checker"
+        "bin/php-ns-fixer"
     ],
     "scripts": {
         "test": "vendor/bin/phpunit -c phpunit.xml.dist",

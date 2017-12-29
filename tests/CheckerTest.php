@@ -1,10 +1,10 @@
 <?php
 
-namespace NamespaceChecker\Tests;
+namespace PhpNsFixer\Tests;
 
 use Mockery;
-use NamespaceChecker\Checker;
-use NamespaceChecker\Result;
+use PhpNsFixer\Checker;
+use PhpNsFixer\Result;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\SplFileInfo;
 

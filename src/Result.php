@@ -1,6 +1,6 @@
 <?php
 
-namespace NamespaceChecker;
+namespace PhpNsFixer;
 
 use Symfony\Component\Finder\SplFileInfo;
 

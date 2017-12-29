@@ -1,6 +1,6 @@
 <?php
 
-namespace NamespaceChecker;
+namespace PhpNsFixer;
 
 use Spatie\Regex\Regex;
 use Symfony\Component\Finder\SplFileInfo;

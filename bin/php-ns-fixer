@@ -9,6 +9,6 @@ if (file_exists($autoload = __DIR__ . '/../../../autoload.php')) {
 
 use Symfony\Component\Console\Application;
 
-$application = new Application('Namespace Checker');
-$application->add(new \NamespaceChecker\Commands\CheckCommand());
+$application = new Application('PHP Namespace Fixer');
+$application->add(new \PhpNsFixer\Commands\CheckCommand());
 $application->run();

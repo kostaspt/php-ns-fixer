@@ -1,5 +1,5 @@
 {
-    "name": "kostaspt/namespace-checker",
+    "name": "kostaspt/php-ns-fixer",
     "description": "Find wrong namespaces in your PHP projects",
     "type": "application",
     "license": "MIT",

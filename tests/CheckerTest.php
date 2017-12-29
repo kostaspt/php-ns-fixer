@@ -2,7 +2,6 @@
 
 namespace PhpNsFixer\Tests;
 
-use Mockery;
 use PhpNsFixer\Checker;
 use PhpNsFixer\Result;
 use PHPUnit\Framework\TestCase;

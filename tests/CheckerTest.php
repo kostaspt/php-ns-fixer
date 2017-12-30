@@ -4,7 +4,6 @@ namespace PhpNsFixer\Tests;
 
 use PhpNsFixer\Checker;
 use PhpNsFixer\Result;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\SplFileInfo;
 
 class CheckerTest extends TestCase

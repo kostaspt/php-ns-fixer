@@ -2,6 +2,7 @@
 
 namespace PhpNsFixer\Commands;
 
+use Illuminate\Support\Collection;
 use PhpNsFixer\Checker;
 use PhpNsFixer\Result;
 use Symfony\Component\Console\Command\Command;
@@ -11,21 +12,32 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 
 class CheckCommand extends Command
 {
     /**
-     * @var \Illuminate\Support\Collection
+     * @var Checker
      */
-    protected $problematicFiles;
+    protected $checker;
+
+    /**
+     * @var ProgressBar
+     */
+    protected $progressBar;
+
+    public function __construct($name = null)
+    {
+        parent::__construct($name);
+
+        $this->checker = new Checker();
+    }
 
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
-        $this->problematicFiles = collect();
-
         $this->setName('check')
             ->setDefinition([
                 new InputArgument('path', InputArgument::REQUIRED, 'The path.'),
@@ -40,26 +52,13 @@ class CheckCommand extends Command
     {
         $files = $this->listFiles($input->getArgument('path'));
 
-        $progressBar = $this->initializeProgressBar($output, $files);
-        $progressBar->start();
+        $this->progressStart($output, $files);
 
-        $checker = new Checker();
-        foreach ($files as $file) {
-            $progressBar->setMessage($file->getRelativePathname(), 'filename');
-            $progressBar->advance();
+        $problematicFiles = $this->collectProblematicFiles($files, $input->getOption('prefix') ?? '');
 
-            $result = $checker->check($file, $input->getOption('prefix') ?? '');
+        $this->progressFinish($output);
 
-            if (! $result->isValid()) {
-                $this->problematicFiles->push($result);
-            }
-        }
-
-        $progressBar->setMessage('Done', 'filename');
-        $progressBar->finish();
-        $output->writeln("\n");
-
-        if ($this->problematicFiles->count() === 0) {
+        if ($problematicFiles->count() === 0) {
             $output->writeln("<info>No problems found! :)</info>");
             return;
         }
@@ -67,12 +66,13 @@ class CheckCommand extends Command
         $output->writeln(
             sprintf(
                 "<options=bold,underscore>There %s %d wrong %s:</>\n",
-                $this->problematicFiles->count() !== 1 ? 'are' : 'is',
-                $this->problematicFiles->count(),
-                $this->problematicFiles->count() !== 1 ? 'namespaces' : 'namespace'
+                $problematicFiles->count() !== 1 ? 'are' : 'is',
+                $problematicFiles->count(),
+                $problematicFiles->count() !== 1 ? 'namespaces' : 'namespace'
             )
         );
-        $this->problematicFiles
+
+        $problematicFiles
             ->each(function (Result $result, $key) use ($output) {
                 $output->writeln(sprintf("%d) %s:", $key + 1, $result->file()->getRelativePathname()));
                 $output->writeln(sprintf("\t<fg=red>- %s</>", $result->expected()));
@@ -80,19 +80,49 @@ class CheckCommand extends Command
             });
     }
 
+    protected function collectProblematicFiles(Finder $files, $prefix = ''): Collection
+    {
+        return collect($files->getIterator())
+            ->map(function (SplFileInfo $file) use ($prefix) {
+                $this->progressBar->setMessage($file->getRelativePathname(), 'filename');
+                $this->progressBar->advance();
+
+                $result = $this->checker->check($file, $prefix);
+
+                if ($result->isValid()) {
+                    return null;
+                }
+
+                return $result;
+            })
+            ->filter()
+            ->values();
+    }
+
     /**
      * @param OutputInterface $output
-     * @param $files
-     * @return ProgressBar
+     * @param Finder $files
+     * @return void
      */
-    protected function initializeProgressBar(OutputInterface $output, Finder $files): ProgressBar
+    protected function progressStart(OutputInterface $output, Finder $files): void
     {
-        $progressBar = new ProgressBar($output, $files->count());
+        $this->progressBar = new ProgressBar($output, $files->count());
 
-        $progressBar->setFormatDefinition('custom', 'Checking files... %current%/%max% (%filename%)');
-        $progressBar->setFormat('custom');
+        $this->progressBar->setFormatDefinition('custom', 'Checking files... %current%/%max% (%filename%)');
+        $this->progressBar->setFormat('custom');
 
-        return $progressBar;
+        $this->progressBar->start();
+    }
+
+    /**
+     * @param OutputInterface $output
+     */
+    protected function progressFinish(OutputInterface $output): void
+    {
+        $this->progressBar->setMessage('Done', 'filename');
+        $this->progressBar->finish();
+
+        $output->writeln("\n");
     }
 
     /**

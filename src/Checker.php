@@ -8,30 +8,46 @@ use Symfony\Component\Finder\SplFileInfo;
 class Checker
 {
     /**
+     * @var SplFileInfo
+     */
+    private $file;
+
+    /**
+     * @param SplFileInfo $file
+     */
+    public function __construct(SplFileInfo $file)
+    {
+        $this->file = $file;
+    }
+
+    /**
      * Check if the file's namespace is valid.
      *
-     * @param SplFileInfo $file
      * @param string $prefix
+     * @param bool $ignoreEmpty
      * @return Result
      */
-    public function check(SplFileInfo $file, string $prefix = ''): Result
+    public function check(string $prefix = '', bool $ignoreEmpty = false): Result
     {
-        $expectedNamespace = $this->namespaceFromPath($file, $prefix);
-        $actualNamespace = $this->namespaceFromFile($file);
+        $expectedNamespace = $this->namespaceFromPath($prefix);
+        $actualNamespace = $this->namespaceFromFile();
 
-        return new Result($file, $actualNamespace === $expectedNamespace, $actualNamespace, $expectedNamespace);
+        if ($ignoreEmpty && $actualNamespace === '') {
+            return new Result($this->file, true, '', '');
+        }
+
+        return new Result($this->file, $actualNamespace === $expectedNamespace, $actualNamespace, $expectedNamespace);
     }
 
     /**
      * Generate the namespace based on file's path.
      *
-     * @param SplFileInfo $file
      * @param string $prefix
      * @return string
      */
-    private function namespaceFromPath(SplFileInfo $file, string $prefix = ''): string
+    private function namespaceFromPath(string $prefix = ''): string
     {
-        $namespace = Regex::replace('/\//', '\\', $file->getRelativePath())->result();
+        $namespace = Regex::replace('/\//', '\\', $this->file->getRelativePath())->result();
 
         if (mb_strlen($prefix) !== 0) {
             if (mb_strlen($namespace) !== 0) {
@@ -47,12 +63,11 @@ class Checker
     /**
      * Extract the namespace from a file.
      *
-     * @param SplFileInfo $file
      * @return string
      */
-    private function namespaceFromFile(SplFileInfo $file): string
+    private function namespaceFromFile(): string
     {
-        $regex = Regex::matchAll('/namespace (.*?)(;|{|$)/', $file->getContents());
+        $regex = Regex::matchAll('/namespace (.*?)(;|{|$)/', $this->file->getContents());
 
         if (! $regex->hasMatch()) {
             return '';

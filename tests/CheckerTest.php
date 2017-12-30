@@ -21,7 +21,7 @@ class Baz {
 }
 EOF;
         $file = $this->mockFile($content);
-        $result = (new Checker())->check($file, 'App');
+        $result = (new Checker($file))->check('App');
         $this->doTest($file, $result, true, 'App\Foo\Bar');
     }
 
@@ -37,7 +37,7 @@ class Baz {
 EOF;
 
         $file = $this->mockFile($content);
-        $result = (new Checker())->check($file, 'App');
+        $result = (new Checker($file))->check('App');
         $this->doTest($file, $result, true, 'App\Foo\Bar');
     }
 
@@ -55,7 +55,7 @@ namespace App\Foo\Bar {
 EOF;
 
         $file = $this->mockFile($content);
-        $result = (new Checker())->check($file, 'App');
+        $result = (new Checker($file))->check('App');
         $this->doTest($file, $result, true, 'App\Foo\Bar');
     }
 
@@ -73,7 +73,7 @@ class Baz {
 EOF;
 
         $file = $this->mockFile($content);
-        $result = (new Checker())->check($file);
+        $result = (new Checker($file))->check();
         $this->doTest($file, $result, true, 'Foo\Bar');
     }
 
@@ -91,7 +91,7 @@ class Baz {
 EOF;
 
         $file = $this->mockFile($content, '');
-        $result = (new Checker())->check($file, 'App');
+        $result = (new Checker($file))->check('App');
         $this->doTest($file, $result, true, 'App');
     }
 
@@ -109,7 +109,7 @@ class Baz {
 EOF;
 
         $file = $this->mockFile($content);
-        $result = (new Checker())->check($file, 'App');
+        $result = (new Checker($file))->check('App');
         $this->doTest($file, $result, false, 'App\Foo\Bar');
     }
 
@@ -125,8 +125,24 @@ class Baz {
 EOF;
 
         $file = $this->mockFile($content);
-        $result = (new Checker())->check($file, 'App');
+        $result = (new Checker($file))->check('App');
         $this->doTest($file, $result, false, 'App\Foo\Bar');
+    }
+
+    /** @test */
+    public function without_namespace_ignoring_empty()
+    {
+        $content = <<<'EOF'
+<?php
+
+class Baz {
+    //
+}
+EOF;
+
+        $file = $this->mockFile($content);
+        $result = (new Checker($file))->check('App', true);
+        $this->doTest($file, $result, true, '');
     }
 
     /**

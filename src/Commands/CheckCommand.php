@@ -17,11 +17,6 @@ use Symfony\Component\Finder\SplFileInfo;
 class CheckCommand extends Command
 {
     /**
-     * @var Checker
-     */
-    protected $checker;
-
-    /**
      * @var ProgressBar
      */
     protected $progressBar;
@@ -29,8 +24,6 @@ class CheckCommand extends Command
     public function __construct($name = null)
     {
         parent::__construct($name);
-
-        $this->checker = new Checker();
     }
 
     /**
@@ -42,6 +35,7 @@ class CheckCommand extends Command
             ->setDefinition([
                 new InputArgument('path', InputArgument::REQUIRED, 'The path.'),
                 new InputOption('prefix', 'P', InputOption::VALUE_REQUIRED, 'Namespace prefix.'),
+                new InputOption('ignore-empty', 'E', InputOption::VALUE_NONE, 'Ignore files without namespace.')
             ]);
     }
 
@@ -54,7 +48,7 @@ class CheckCommand extends Command
 
         $this->progressStart($output, $files);
 
-        $problematicFiles = $this->collectProblematicFiles($files, $input->getOption('prefix') ?? '');
+        $problematicFiles = $this->collectProblematicFiles($input, $files);
 
         $this->progressFinish($output);
 
@@ -80,14 +74,17 @@ class CheckCommand extends Command
             });
     }
 
-    protected function collectProblematicFiles(Finder $files, $prefix = ''): Collection
+    protected function collectProblematicFiles(InputInterface $input, Finder $files): Collection
     {
         return collect($files->getIterator())
-            ->map(function (SplFileInfo $file) use ($prefix) {
+            ->map(function (SplFileInfo $file) use ($input) {
                 $this->progressBar->setMessage($file->getRelativePathname(), 'filename');
                 $this->progressBar->advance();
 
-                $result = $this->checker->check($file, $prefix);
+                $result = (new Checker($file))->check(
+                    $input->getOption('prefix') ?? '',
+                    $input->getOption('ignore-empty') ?? false
+                );
 
                 if ($result->isValid()) {
                     return null;

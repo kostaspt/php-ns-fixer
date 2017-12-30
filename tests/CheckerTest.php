@@ -9,41 +9,6 @@ use Symfony\Component\Finder\SplFileInfo;
 
 class CheckerTest extends TestCase
 {
-    /**
-     * @param string $content
-     * @param string $relativePath
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function mockFile(string $content, string $relativePath = 'Foo\Bar')
-    {
-        $stub = $this->createMock(SplFileInfo::class);
-
-        $stub->method('getRelativePath')->willReturn($relativePath);
-        $stub->method('getContents')->willReturn($content);
-
-        return $stub;
-    }
-
-    /**
-     * @param SplFileInfo $file
-     * @param Result $result
-     * @param bool $isValid
-     * @param string $namespace
-     */
-    private function doTest(SplFileInfo $file, Result $result, bool $isValid, string $namespace)
-    {
-        $this->assertEquals($file->getRelativePath(), $result->file()->getRelativePath());
-
-        $this->assertEquals($namespace, $result->expected());
-        if ($isValid) {
-            $this->assertEquals($namespace, $result->actual());
-        } else {
-            $this->assertNotEquals($namespace, $result->actual());
-        }
-
-        $this->assertEquals($isValid, $result->isValid());
-    }
-
     /** @test */
     public function generic_valid_namespace()
     {
@@ -163,5 +128,40 @@ EOF;
         $file = $this->mockFile($content);
         $result = (new Checker())->check($file, 'App');
         $this->doTest($file, $result, false, 'App\Foo\Bar');
+    }
+
+    /**
+     * @param string $content
+     * @param string $relativePath
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function mockFile(string $content, string $relativePath = 'Foo\Bar')
+    {
+        $stub = $this->createMock(SplFileInfo::class);
+
+        $stub->method('getRelativePath')->willReturn($relativePath);
+        $stub->method('getContents')->willReturn($content);
+
+        return $stub;
+    }
+
+    /**
+     * @param SplFileInfo $file
+     * @param Result $result
+     * @param bool $isValid
+     * @param string $namespace
+     */
+    private function doTest(SplFileInfo $file, Result $result, bool $isValid, string $namespace)
+    {
+        $this->assertEquals($file->getRelativePath(), $result->file()->getRelativePath());
+
+        $this->assertEquals($namespace, $result->expected());
+        if ($isValid) {
+            $this->assertEquals($namespace, $result->actual());
+        } else {
+            $this->assertNotEquals($namespace, $result->actual());
+        }
+
+        $this->assertEquals($isValid, $result->isValid());
     }
 }

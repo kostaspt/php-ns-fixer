@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.1",
         "spatie/regex": "^1.2",
         "symfony/console": "^3.4",
         "symfony/finder": "^3.4",

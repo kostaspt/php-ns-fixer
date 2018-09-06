@@ -2,9 +2,6 @@
 
 namespace PhpNsFixer\Tests;
 
-use FilesystemIterator;
-use SplFileInfo;
-
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -33,34 +30,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Delete the auto-generated "temp" directory.
+     * @param array $parts
+     * @return string
      */
-    protected function deleteTempDirectory()
+    protected function joinPath(array $parts): string
     {
-        $this->deleteDirectory($this->testPath . '/temp');
-    }
-
-    /**
-     * Delete a (non-empty) directory.
-     *
-     * @param string $directory
-     * @return bool
-     */
-    protected function deleteDirectory(string $directory)
-    {
-        if (! is_dir($directory)) {
-            return false;
-        }
-
-        collect(new FilesystemIterator($directory))
-            ->each(function(SplFileInfo $item) {
-                if ($item->isDir() && ! $item->isLink()) {
-                    $this->deleteDirectory($item->getPathname());
-                } else {
-                    @unlink($item->getPathname());
-                }
-            });
-
-        @rmdir($directory);
+        return join(DIRECTORY_SEPARATOR, $parts);
     }
 }

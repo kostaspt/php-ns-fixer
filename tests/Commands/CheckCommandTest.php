@@ -2,26 +2,13 @@
 
 namespace PhpNsFixer\Tests\Commands;
 
+use PhpNsFixer\Tests\InteractsWithFiles;
 use PhpNsFixer\Tests\TestCase;
 use Spatie\Snapshots\MatchesSnapshots;
 
 class CheckCommandTest extends TestCase
 {
-    use MatchesSnapshots;
-
-    protected function setUp()
-    {
-        parent::setUp();
-
-        @mkdir($this->testPath . '/temp/foo', 0777, true);
-    }
-
-    protected function tearDown()
-    {
-        parent::tearDown();
-
-        $this->deleteTempDirectory();
-    }
+    use MatchesSnapshots, InteractsWithFiles;
 
     /** @test */
     public function valid_check()

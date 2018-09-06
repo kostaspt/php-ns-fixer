@@ -4,6 +4,7 @@ namespace PhpNsFixer\Commands;
 
 use Illuminate\Support\Collection;
 use PhpNsFixer\Checker;
+use PhpNsFixer\Finder;
 use PhpNsFixer\Result;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -11,7 +12,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 class CheckCommand extends Command
@@ -44,7 +44,7 @@ class CheckCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $files = $this->listFiles($input->getArgument('path'));
+        $files = Finder::discover($input->getArgument('path'));
 
         $this->progressStart($output, $files);
 
@@ -74,9 +74,14 @@ class CheckCommand extends Command
             });
     }
 
-    protected function collectProblematicFiles(InputInterface $input, Finder $files): Collection
+    /**
+     * @param InputInterface $input
+     * @param Collection $files
+     * @return Collection
+     */
+    protected function collectProblematicFiles(InputInterface $input, Collection $files): Collection
     {
-        return collect($files->getIterator())
+        return $files
             ->map(function (SplFileInfo $file) use ($input) {
                 $this->progressBar->setMessage($file->getRelativePathname(), 'filename');
                 $this->progressBar->advance();
@@ -98,10 +103,10 @@ class CheckCommand extends Command
 
     /**
      * @param OutputInterface $output
-     * @param Finder $files
+     * @param Collection $files
      * @return void
      */
-    protected function progressStart(OutputInterface $output, Finder $files): void
+    protected function progressStart(OutputInterface $output, Collection $files): void
     {
         $this->progressBar = new ProgressBar($output, $files->count());
 
@@ -120,20 +125,5 @@ class CheckCommand extends Command
         $this->progressBar->finish();
 
         $output->writeln("\n");
-    }
-
-    /**
-     * @param string $path
-     * @return Finder
-     */
-    protected function listFiles(string $path): Finder
-    {
-        return Finder::create()
-            ->name('*.php')
-            ->name('*.phpt')
-            ->ignoreDotFiles(true)
-            ->ignoreVCS(true)
-            ->exclude('vendor')
-            ->in($path);
     }
 }

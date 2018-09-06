@@ -2,11 +2,11 @@
 
 namespace PhpNsFixer\Tests;
 
-use PhpNsFixer\Checker;
+use PhpNsFixer\Evaluator;
 use PhpNsFixer\Result;
 use Symfony\Component\Finder\SplFileInfo;
 
-class CheckerTest extends TestCase
+class EvaluatorTest extends TestCase
 {
     /** @test */
     public function generic_valid_namespace()
@@ -21,9 +21,10 @@ class Baz {
 }
 EOF;
         $file = $this->mockFile($content);
-        $result = (new Checker($file))->check('App');
+        $result = (new Evaluator())->evaluate($file, 'App');
         $this->doTest($file, $result, true, 'App\Foo\Bar');
     }
+
 
     /** @test */
     public function inline_valid_namespace()
@@ -37,7 +38,7 @@ class Baz {
 EOF;
 
         $file = $this->mockFile($content);
-        $result = (new Checker($file))->check('App');
+        $result = (new Evaluator())->evaluate($file, 'App');
         $this->doTest($file, $result, true, 'App\Foo\Bar');
     }
 
@@ -55,7 +56,7 @@ namespace App\Foo\Bar {
 EOF;
 
         $file = $this->mockFile($content);
-        $result = (new Checker($file))->check('App');
+        $result = (new Evaluator())->evaluate($file, 'App');
         $this->doTest($file, $result, true, 'App\Foo\Bar');
     }
 
@@ -73,7 +74,7 @@ class Baz {
 EOF;
 
         $file = $this->mockFile($content);
-        $result = (new Checker($file))->check();
+        $result = (new Evaluator())->evaluate($file);
         $this->doTest($file, $result, true, 'Foo\Bar');
     }
 
@@ -91,7 +92,7 @@ class Baz {
 EOF;
 
         $file = $this->mockFile($content, '');
-        $result = (new Checker($file))->check('App');
+        $result = (new Evaluator())->evaluate($file, 'App');
         $this->doTest($file, $result, true, 'App');
     }
 
@@ -109,7 +110,7 @@ class Baz {
 EOF;
 
         $file = $this->mockFile($content);
-        $result = (new Checker($file))->check('App');
+        $result = (new Evaluator())->evaluate($file, 'App');
         $this->doTest($file, $result, false, 'App\Foo\Bar');
     }
 
@@ -125,7 +126,7 @@ class Baz {
 EOF;
 
         $file = $this->mockFile($content);
-        $result = (new Checker($file))->check('App');
+        $result = (new Evaluator())->evaluate($file, 'App');
         $this->doTest($file, $result, false, 'App\Foo\Bar');
     }
 
@@ -141,7 +142,7 @@ class Baz {
 EOF;
 
         $file = $this->mockFile($content);
-        $result = (new Checker($file))->check('App', true);
+        $result = (new Evaluator())->evaluate($file, 'App', true);
         $this->doTest($file, $result, true, '');
     }
 

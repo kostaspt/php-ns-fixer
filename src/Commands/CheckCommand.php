@@ -3,7 +3,8 @@
 namespace PhpNsFixer\Commands;
 
 use Illuminate\Support\Collection;
-use PhpNsFixer\Checker;
+use PhpNsFixer\Evaluator;
+use PhpNsFixer\Events\FileProcessedEvent;
 use PhpNsFixer\Finder;
 use PhpNsFixer\Result;
 use Symfony\Component\Console\Command\Command;
@@ -12,18 +13,29 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class CheckCommand extends Command
 {
     /**
      * @var ProgressBar
      */
-    protected $progressBar;
+    private $progressBar;
+
+    /**
+     * @var EventDispatcher
+     */
+    private $dispatcher;
 
     public function __construct($name = null)
     {
         parent::__construct($name);
+
+        $this->dispatcher = new EventDispatcher();
+        $this->dispatcher->addListener(FileProcessedEvent::class, function (FileProcessedEvent $event) {
+            $this->progressBar->setMessage($event->file->getRelativePathname(), 'filename');
+            $this->progressBar->advance();
+        });
     }
 
     /**
@@ -48,7 +60,7 @@ class CheckCommand extends Command
 
         $this->progressStart($output, $files);
 
-        $problematicFiles = $this->collectProblematicFiles($input, $files);
+        $problematicFiles = (new Evaluator($this->dispatcher))->check($files, $input->getOption('prefix') ?? '', $input->getOption('ignore-empty') ?? false);
 
         $this->progressFinish($output);
 
@@ -75,38 +87,11 @@ class CheckCommand extends Command
     }
 
     /**
-     * @param InputInterface $input
-     * @param Collection $files
-     * @return Collection
-     */
-    protected function collectProblematicFiles(InputInterface $input, Collection $files): Collection
-    {
-        return $files
-            ->map(function (SplFileInfo $file) use ($input) {
-                $this->progressBar->setMessage($file->getRelativePathname(), 'filename');
-                $this->progressBar->advance();
-
-                $result = (new Checker($file))->check(
-                    $input->getOption('prefix') ?? '',
-                    $input->getOption('ignore-empty') ?? false
-                );
-
-                if ($result->isValid()) {
-                    return null;
-                }
-
-                return $result;
-            })
-            ->filter()
-            ->values();
-    }
-
-    /**
      * @param OutputInterface $output
      * @param Collection $files
      * @return void
      */
-    protected function progressStart(OutputInterface $output, Collection $files): void
+    private function progressStart(OutputInterface $output, Collection $files): void
     {
         $this->progressBar = new ProgressBar($output, $files->count());
 
@@ -119,7 +104,7 @@ class CheckCommand extends Command
     /**
      * @param OutputInterface $output
      */
-    protected function progressFinish(OutputInterface $output): void
+    private function progressFinish(OutputInterface $output): void
     {
         $this->progressBar->setMessage('Done', 'filename');
         $this->progressBar->finish();

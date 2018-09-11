@@ -66,7 +66,7 @@ class CheckCommand extends Command
 
         if ($problematicFiles->count() === 0) {
             $output->writeln("<info>No problems found! :)</info>");
-            return;
+            return 0;
         }
 
         $output->writeln(
@@ -84,6 +84,8 @@ class CheckCommand extends Command
                 $output->writeln(sprintf("\t<fg=red>- %s</>", $result->expected()));
                 $output->writeln(sprintf("\t<fg=green>+ %s</>", $result->actual()));
             });
+
+        return $problematicFiles->count();
     }
 
     /**

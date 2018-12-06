@@ -4,7 +4,7 @@ namespace PhpNsFixer\Commands;
 
 use PhpNsFixer\Evaluator;
 use PhpNsFixer\Events\FileProcessedEvent;
-use PhpNsFixer\Finder;
+use PhpNsFixer\Finders\FileFinder;
 use PhpNsFixer\Result;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -56,7 +56,7 @@ class CheckCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $files = Finder::discover($input->getArgument('path'));
+        $files = FileFinder::list($input->getArgument('path'));
 
         $this->progressStart($output, $files);
 

@@ -151,7 +151,7 @@ EOF;
      * @param string $relativePath
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function mockFile(string $content, string $relativePath = 'Foo\Bar')
+    private function mockFile(string $content, string $relativePath = 'Foo/Bar')
     {
         $stub = $this->createMock(SplFileInfo::class);
 

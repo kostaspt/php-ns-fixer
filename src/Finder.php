@@ -3,6 +3,7 @@
 namespace PhpNsFixer;
 
 use Symfony\Component\Finder\Finder as SymfonyFinder;
+use Symfony\Component\Finder\SplFileInfo;
 use Tightenco\Collect\Support\Collection;
 
 class Finder
@@ -18,5 +19,18 @@ class Finder
                 ->exclude('vendor')
                 ->in($path)
         );
+    }
+
+    public static function composerConfig(string $path): ?SplFileInfo
+    {
+        $finder = SymfonyFinder::create()
+            ->name('composer.json')
+            ->in($path)
+            ->depth('== 0')
+            ->getIterator();
+
+        $finder->rewind();
+
+        return $finder->current();
     }
 }

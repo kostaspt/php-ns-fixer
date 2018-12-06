@@ -2,8 +2,8 @@
 
 namespace PhpNsFixer;
 
-use Illuminate\Support\Collection;
 use Symfony\Component\Finder\Finder as SymfonyFinder;
+use Tightenco\Collect\Support\Collection;
 
 class Finder
 {

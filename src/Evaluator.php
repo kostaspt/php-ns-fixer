@@ -2,11 +2,11 @@
 
 namespace PhpNsFixer;
 
-use Illuminate\Support\Collection;
 use PhpNsFixer\Events\FileProcessedEvent;
 use Spatie\Regex\Regex;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Finder\SplFileInfo;
+use Tightenco\Collect\Support\Collection;
 
 class Evaluator
 {

@@ -2,7 +2,6 @@
 
 namespace PhpNsFixer\Commands;
 
-use Illuminate\Support\Collection;
 use PhpNsFixer\Evaluator;
 use PhpNsFixer\Events\FileProcessedEvent;
 use PhpNsFixer\Finder;
@@ -14,6 +13,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Tightenco\Collect\Support\Collection;
 
 class CheckCommand extends Command
 {

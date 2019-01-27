@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpNsFixer\Events;
+namespace PhpNsFixer\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Finder\SplFileInfo;

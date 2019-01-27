@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpNsFixer\Finders;
+namespace PhpNsFixer\Finder;
 
 use Symfony\Component\Finder\Finder as SymfonyFinder;
 use Tightenco\Collect\Support\Collection;

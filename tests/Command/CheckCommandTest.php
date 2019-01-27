@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpNsFixer\Tests\Commands;
+namespace PhpNsFixer\Tests\Command;
 
 use PhpNsFixer\Tests\InteractsWithFiles;
 use PhpNsFixer\Tests\TestCase;

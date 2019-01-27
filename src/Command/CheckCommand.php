@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpNsFixer\Commands;
+namespace PhpNsFixer\Command;
 
 use PhpNsFixer\Evaluator;
-use PhpNsFixer\Events\FileProcessedEvent;
-use PhpNsFixer\Finders\FileFinder;
+use PhpNsFixer\Event\FileProcessedEvent;
+use PhpNsFixer\Finder\FileFinder;
 use PhpNsFixer\Result;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;

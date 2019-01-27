@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpNsFixer\Tests\Finders;
+namespace PhpNsFixer\Tests\Finder;
 
-use PhpNsFixer\Finders\FileFinder;
+use PhpNsFixer\Finder\FileFinder;
 use PhpNsFixer\Tests\InteractsWithFiles;
 use PhpNsFixer\Tests\TestCase;
 

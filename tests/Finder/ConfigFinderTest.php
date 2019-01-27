@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpNsFixer\Tests\Finders;
+namespace PhpNsFixer\Tests\Finder;
 
-use PhpNsFixer\Finders\ConfigFinder;
+use PhpNsFixer\Finder\ConfigFinder;
 use PhpNsFixer\Tests\InteractsWithFiles;
 use PhpNsFixer\Tests\TestCase;
 use Symfony\Component\Finder\SplFileInfo;
@@ -10,7 +10,7 @@ use Symfony\Component\Finder\SplFileInfo;
 class ConfigFinderTest extends TestCase
 {
     use InteractsWithFiles;
-    
+
     /** @test */
     public function gets_composer_json()
     {

@@ -2,7 +2,7 @@
 
 namespace PhpNsFixer;
 
-use PhpNsFixer\Events\FileProcessedEvent;
+use PhpNsFixer\Event\FileProcessedEvent;
 use Spatie\Regex\Regex;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Finder\SplFileInfo;

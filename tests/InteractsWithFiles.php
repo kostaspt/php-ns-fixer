@@ -41,18 +41,17 @@ trait InteractsWithFiles
      */
     protected function deleteDirectory(string $directory)
     {
-        if (! is_dir($directory)) {
+        if (!is_dir($directory)) {
             return false;
         }
 
-        collect(new FilesystemIterator($directory))
-            ->each(function(SplFileInfo $item) {
-                if ($item->isDir() && ! $item->isLink()) {
-                    $this->deleteDirectory($item->getPathname());
-                } else {
-                    @unlink($item->getPathname());
-                }
-            });
+        collect(new FilesystemIterator($directory))->each(function (SplFileInfo $item) {
+            if ($item->isDir() && !$item->isLink()) {
+                $this->deleteDirectory($item->getPathname());
+            } else {
+                @unlink($item->getPathname());
+            }
+        });
 
         return @rmdir($directory);
     }

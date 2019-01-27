@@ -43,12 +43,12 @@ class CheckCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('check')
-            ->setDefinition([
-                new InputArgument('path', InputArgument::REQUIRED, 'The path.'),
-                new InputOption('prefix', 'P', InputOption::VALUE_REQUIRED, 'Namespace prefix.'),
-                new InputOption('ignore-empty', 'E', InputOption::VALUE_NONE, 'Ignore files without namespace.')
-            ]);
+        $this->setName('check');
+        $this->setDefinition([
+            new InputArgument('path', InputArgument::REQUIRED, 'The path.'),
+            new InputOption('prefix', 'P', InputOption::VALUE_REQUIRED, 'Namespace prefix.'),
+            new InputOption('ignore-empty', 'E', InputOption::VALUE_NONE, 'Ignore files without namespace.')
+        ]);
     }
 
     /**
@@ -60,7 +60,11 @@ class CheckCommand extends Command
 
         $this->progressStart($output, $files);
 
-        $problematicFiles = (new Evaluator($this->dispatcher))->check($files, $input->getOption('prefix') ?? '', $input->getOption('ignore-empty') ?? false);
+        $problematicFiles = (new Evaluator($this->dispatcher))->check(
+            $files,
+            $input->getOption('prefix') ?? '',
+            $input->getOption('ignore-empty') ?? false
+        );
 
         $this->progressFinish($output);
 
@@ -78,12 +82,11 @@ class CheckCommand extends Command
             )
         );
 
-        $problematicFiles
-            ->each(function (Result $result, $key) use ($output) {
-                $output->writeln(sprintf("%d) %s:", $key + 1, $result->file()->getRelativePathname()));
-                $output->writeln(sprintf("\t<fg=red>- %s</>", $result->expected()));
-                $output->writeln(sprintf("\t<fg=green>+ %s</>", $result->actual()));
-            });
+        $problematicFiles->each(function (Result $result, $key) use ($output) {
+            $output->writeln(sprintf("%d) %s:", $key + 1, $result->file()->getRelativePathname()));
+            $output->writeln(sprintf("\t<fg=red>- %s</>", $result->expected()));
+            $output->writeln(sprintf("\t<fg=green>+ %s</>", $result->actual()));
+        });
 
         return $problematicFiles->count();
     }

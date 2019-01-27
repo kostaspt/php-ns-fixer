@@ -25,7 +25,6 @@ EOF;
         $this->doTest($file, $result, true, 'App\Foo\Bar');
     }
 
-
     /** @test */
     public function inline_valid_namespace()
     {

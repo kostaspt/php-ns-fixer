@@ -101,7 +101,7 @@ class Evaluator
     {
         $regex = Regex::matchAll('/namespace (.*?)(;|{|$)/', $file->getContents());
 
-        if (! $regex->hasMatch()) {
+        if (!$regex->hasMatch()) {
             return '';
         }
 

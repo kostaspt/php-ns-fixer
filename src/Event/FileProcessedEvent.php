@@ -10,7 +10,7 @@ class FileProcessedEvent extends Event
     /**
      * @var SplFileInfo
      */
-    public $file;
+    private $file;
 
     /**
      * @param SplFileInfo $file
@@ -18,5 +18,13 @@ class FileProcessedEvent extends Event
     public function __construct(SplFileInfo $file)
     {
         $this->file = $file;
+    }
+
+    /**
+     * @return SplFileInfo
+     */
+    public function getFile(): SplFileInfo
+    {
+        return $this->file;
     }
 }

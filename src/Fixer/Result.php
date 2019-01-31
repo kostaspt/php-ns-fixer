@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpNsFixer;
+namespace PhpNsFixer\Fixer;
 
 use Symfony\Component\Finder\SplFileInfo;
 
-class Result
+final class Result
 {
     /**
      * @var SplFileInfo
@@ -43,9 +43,25 @@ class Result
     /**
      * @return SplFileInfo
      */
-    public function file(): SplFileInfo
+    public function getFile(): SplFileInfo
     {
         return $this->file;
+    }
+
+    /**
+     * @return string
+     */
+    public function getActual(): string
+    {
+        return $this->actual;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExpected(): string
+    {
+        return $this->expected;
     }
 
     /**
@@ -54,21 +70,5 @@ class Result
     public function isValid(): bool
     {
         return $this->valid;
-    }
-
-    /**
-     * @return string
-     */
-    public function actual(): string
-    {
-        return $this->actual;
-    }
-
-    /**
-     * @return string
-     */
-    public function expected(): string
-    {
-        return $this->expected;
     }
 }

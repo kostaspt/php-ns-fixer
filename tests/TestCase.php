@@ -2,6 +2,8 @@
 
 namespace PhpNsFixer\Tests;
 
+use Symfony\Component\Finder\SplFileInfo;
+
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -36,5 +38,20 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected function joinPath(array $parts): string
     {
         return join(DIRECTORY_SEPARATOR, $parts);
+    }
+
+    /**
+     * @param string $content
+     * @param string $relativePath
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function mockFile(string $content, string $relativePath = 'Foo/Bar')
+    {
+        $stub = $this->createMock(SplFileInfo::class);
+
+        $stub->method('getRelativePath')->willReturn($relativePath);
+        $stub->method('getContents')->willReturn($content);
+
+        return $stub;
     }
 }

@@ -2,8 +2,8 @@
 
 namespace PhpNsFixer\Tests;
 
-use FilesystemIterator;
-use SplFileInfo;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 
 trait InteractsWithFiles
 {
@@ -26,6 +26,18 @@ trait InteractsWithFiles
     }
 
     /**
+     * @param string $content
+     * @param string $filename
+     * @return SplFileInfo
+     */
+    protected function createTempFile(string $content, string $filename = 'Bar.php'): SplFileInfo
+    {
+        $filePath = $this->testPath . '/temp/foo/' . $filename;
+        file_put_contents($filePath, $content);
+        return new SplFileInfo($filePath, '', $filename);
+    }
+
+    /**
      * Delete the auto-generated "temp" directory.
      */
     protected function deleteTempDirectory()
@@ -45,7 +57,8 @@ trait InteractsWithFiles
             return false;
         }
 
-        collect(new FilesystemIterator($directory))->each(function (SplFileInfo $item) {
+        $existingFiles = Finder::create()->ignoreDotFiles(false)->in($directory);
+        collect($existingFiles)->each(function (SplFileInfo $item) {
             if ($item->isDir() && !$item->isLink()) {
                 $this->deleteDirectory($item->getPathname());
             } else {

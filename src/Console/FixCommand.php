@@ -1,11 +1,12 @@
 <?php
 
-namespace PhpNsFixer\Command;
+namespace PhpNsFixer\Console;
 
-use PhpNsFixer\Evaluator;
 use PhpNsFixer\Event\FileProcessedEvent;
 use PhpNsFixer\Finder\FileFinder;
-use PhpNsFixer\Result;
+use PhpNsFixer\Fixer\Result;
+use PhpNsFixer\Runner\Runner;
+use PhpNsFixer\Runner\RunnerOptions;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
@@ -15,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Tightenco\Collect\Support\Collection;
 
-class CheckCommand extends Command
+class FixCommand extends Command
 {
     /**
      * @var ProgressBar
@@ -33,7 +34,7 @@ class CheckCommand extends Command
 
         $this->dispatcher = new EventDispatcher();
         $this->dispatcher->addListener(FileProcessedEvent::class, function (FileProcessedEvent $event) {
-            $this->progressBar->setMessage($event->file->getRelativePathname(), 'filename');
+            $this->progressBar->setMessage($event->getFile()->getRelativePathname(), 'filename');
             $this->progressBar->advance();
         });
     }
@@ -43,11 +44,12 @@ class CheckCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('check');
+        $this->setName('fix');
         $this->setDefinition([
             new InputArgument('path', InputArgument::REQUIRED, 'The path.'),
             new InputOption('prefix', 'P', InputOption::VALUE_REQUIRED, 'Namespace prefix.'),
-            new InputOption('ignore-empty', 'E', InputOption::VALUE_NONE, 'Ignore files without namespace.')
+            new InputOption('skip-empty', 'E', InputOption::VALUE_NONE, 'Skip files without namespace.'),
+            new InputOption('dry-run', null, InputOption::VALUE_NONE, 'Only show which files would have been modified.')
         ]);
     }
 
@@ -60,11 +62,13 @@ class CheckCommand extends Command
 
         $this->progressStart($output, $files);
 
-        $problematicFiles = (new Evaluator($this->dispatcher))->check(
+        $runnerOptions = new RunnerOptions(
             $files,
-            $input->getOption('prefix') ?? '',
-            $input->getOption('ignore-empty') ?? false
+            $input->getOption('prefix'),
+            $input->getOption('skip-empty'),
+            $input->getOption('dry-run')
         );
+        $problematicFiles = (new Runner($runnerOptions, $this->dispatcher))->run();
 
         $this->progressFinish($output);
 
@@ -76,16 +80,16 @@ class CheckCommand extends Command
         $output->writeln(
             sprintf(
                 "<options=bold,underscore>There %s %d wrong %s:</>\n",
-                $problematicFiles->count() !== 1 ? 'are' : 'is',
+                $problematicFiles->count() !== 1 ? ($input->getOption('dry-run') ? 'are' : 'were') : ($input->getOption('dry-run') ? 'is' : 'was'),
                 $problematicFiles->count(),
                 $problematicFiles->count() !== 1 ? 'namespaces' : 'namespace'
             )
         );
 
         $problematicFiles->each(function (Result $result, $key) use ($output) {
-            $output->writeln(sprintf("%d) %s:", $key + 1, $result->file()->getRelativePathname()));
-            $output->writeln(sprintf("\t<fg=red>- %s</>", $result->expected()));
-            $output->writeln(sprintf("\t<fg=green>+ %s</>", $result->actual()));
+            $output->writeln(sprintf("%d) %s:", $key + 1, $result->getFile()->getRelativePathname()));
+            $output->writeln(sprintf("\t<fg=red>- %s</>", $result->getExpected()));
+            $output->writeln(sprintf("\t<fg=green>+ %s</>", $result->getActual()));
         });
 
         return $problematicFiles->count();

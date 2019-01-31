@@ -1,9 +1,10 @@
 <?php
 
-namespace PhpNsFixer\Tests;
+namespace PhpNsFixer\Tests\Fixer;
 
-use PhpNsFixer\Evaluator;
-use PhpNsFixer\Result;
+use PhpNsFixer\Fixer\Evaluator;
+use PhpNsFixer\Fixer\Result;
+use PhpNsFixer\Tests\TestCase;
 use Symfony\Component\Finder\SplFileInfo;
 
 class EvaluatorTest extends TestCase
@@ -21,7 +22,7 @@ class Baz {
 }
 EOF;
         $file = $this->mockFile($content);
-        $result = (new Evaluator())->evaluate($file, 'App');
+        $result = (new Evaluator())->check($file, 'App');
         $this->doTest($file, $result, true, 'App\Foo\Bar');
     }
 
@@ -37,7 +38,7 @@ class Baz {
 EOF;
 
         $file = $this->mockFile($content);
-        $result = (new Evaluator())->evaluate($file, 'App');
+        $result = (new Evaluator())->check($file, 'App');
         $this->doTest($file, $result, true, 'App\Foo\Bar');
     }
 
@@ -55,7 +56,7 @@ namespace App\Foo\Bar {
 EOF;
 
         $file = $this->mockFile($content);
-        $result = (new Evaluator())->evaluate($file, 'App');
+        $result = (new Evaluator())->check($file, 'App');
         $this->doTest($file, $result, true, 'App\Foo\Bar');
     }
 
@@ -73,7 +74,7 @@ class Baz {
 EOF;
 
         $file = $this->mockFile($content);
-        $result = (new Evaluator())->evaluate($file);
+        $result = (new Evaluator())->check($file);
         $this->doTest($file, $result, true, 'Foo\Bar');
     }
 
@@ -91,7 +92,7 @@ class Baz {
 EOF;
 
         $file = $this->mockFile($content, '');
-        $result = (new Evaluator())->evaluate($file, 'App');
+        $result = (new Evaluator())->check($file, 'App');
         $this->doTest($file, $result, true, 'App');
     }
 
@@ -109,7 +110,7 @@ class Baz {
 EOF;
 
         $file = $this->mockFile($content);
-        $result = (new Evaluator())->evaluate($file, 'App');
+        $result = (new Evaluator())->check($file, 'App');
         $this->doTest($file, $result, false, 'App\Foo\Bar');
     }
 
@@ -125,7 +126,7 @@ class Baz {
 EOF;
 
         $file = $this->mockFile($content);
-        $result = (new Evaluator())->evaluate($file, 'App');
+        $result = (new Evaluator())->check($file, 'App');
         $this->doTest($file, $result, false, 'App\Foo\Bar');
     }
 
@@ -141,23 +142,8 @@ class Baz {
 EOF;
 
         $file = $this->mockFile($content);
-        $result = (new Evaluator())->evaluate($file, 'App', true);
+        $result = (new Evaluator())->check($file, 'App', true);
         $this->doTest($file, $result, true, '');
-    }
-
-    /**
-     * @param string $content
-     * @param string $relativePath
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function mockFile(string $content, string $relativePath = 'Foo/Bar')
-    {
-        $stub = $this->createMock(SplFileInfo::class);
-
-        $stub->method('getRelativePath')->willReturn($relativePath);
-        $stub->method('getContents')->willReturn($content);
-
-        return $stub;
     }
 
     /**
@@ -168,13 +154,13 @@ EOF;
      */
     private function doTest(SplFileInfo $file, Result $result, bool $isValid, string $namespace)
     {
-        $this->assertEquals($file->getRelativePath(), $result->file()->getRelativePath());
+        $this->assertEquals($file->getRelativePath(), $result->getFile()->getRelativePath());
 
-        $this->assertEquals($namespace, $result->expected());
+        $this->assertEquals($namespace, $result->getExpected());
         if ($isValid) {
-            $this->assertEquals($namespace, $result->actual());
+            $this->assertEquals($namespace, $result->getActual());
         } else {
-            $this->assertNotEquals($namespace, $result->actual());
+            $this->assertNotEquals($namespace, $result->getActual());
         }
 
         $this->assertEquals($isValid, $result->isValid());

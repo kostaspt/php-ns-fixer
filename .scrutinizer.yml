@@ -1,0 +1,21 @@
+checks:
+    php: true
+
+filter:
+    excluded_paths:
+        - 'bin/*'
+        - 'tests/*'
+
+tools:
+    external_code_coverage: true
+    php_analyzer: true
+    php_code_sniffer: true
+    php_cpd:
+        enabled: true
+        excluded_dirs: [tests, vendor]
+    php_loc:
+        enabled: true
+        excluded_dirs: [tests, vendor]
+    php_mess_detector: true
+    php_pdepend: true
+    sensiolabs_security_checker: true

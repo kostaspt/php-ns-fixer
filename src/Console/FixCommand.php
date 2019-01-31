@@ -64,9 +64,9 @@ class FixCommand extends Command
 
         $runnerOptions = new RunnerOptions(
             $files,
-            $input->getOption('prefix'),
-            $input->getOption('skip-empty'),
-            $input->getOption('dry-run')
+            $input->getOption('prefix') ?? '',
+            $input->getOption('skip-empty') ?? false,
+            $input->getOption('dry-run') ?? false
         );
         $problematicFiles = (new Runner($runnerOptions, $this->dispatcher))->run();
 

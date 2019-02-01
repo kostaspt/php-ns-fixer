@@ -1,5 +1,6 @@
 # PHP Namespace Fixer
 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/kostaspt/php-ns-fixer.svg?style=flat-square)](https://packagist.org/packages/kostaspt/php-ns-fixer)
 [![Build Status](https://travis-ci.org/kostaspt/php-ns-fixer.svg?branch=master)](https://travis-ci.org/kostaspt/php-ns-fixer)
 [![Code Coverage](https://scrutinizer-ci.com/g/kostaspt/php-ns-fixer/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/kostaspt/php-ns-fixer/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/kostaspt/php-ns-fixer/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/kostaspt/php-ns-fixer/?branch=master)

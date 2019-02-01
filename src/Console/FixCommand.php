@@ -80,7 +80,7 @@ class FixCommand extends Command
         $output->writeln(
             sprintf(
                 "<options=bold,underscore>There %s %d wrong %s:</>\n",
-                $problematicFiles->count() !== 1 ? ($input->getOption('dry-run') ? 'are' : 'were') : ($input->getOption('dry-run') ? 'is' : 'was'),
+                $this->verbForMessage($problematicFiles, $input->getOption('dry-run')),
                 $problematicFiles->count(),
                 $problematicFiles->count() !== 1 ? 'namespaces' : 'namespace'
             )
@@ -119,5 +119,15 @@ class FixCommand extends Command
         $this->progressBar->finish();
 
         $output->writeln("\n");
+    }
+
+    /**
+     * @param Collection $problematicFiles
+     * @param bool $isDryRun
+     * @return string
+     */
+    private function verbForMessage(Collection $problematicFiles, bool $isDryRun = false): string
+    {
+        return $problematicFiles->count() !== 1 ? ($isDryRun ? 'are' : 'were') : ($isDryRun ? 'is' : 'was');
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpNsFixer\Runner;
 
 use PhpNsFixer\Event\FileProcessedEvent;
@@ -10,10 +12,10 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Finder\SplFileInfo;
 use Tightenco\Collect\Support\Collection;
 
-class Runner
+final class Runner
 {
     /**
-     * @var EventDispatcher
+     * @var EventDispatcher|null
      */
     protected $dispatcher;
 
@@ -26,6 +28,7 @@ class Runner
      * @var Fixer
      */
     protected $fixer;
+
     /**
      * @var RunnerOptions
      */
@@ -72,8 +75,9 @@ class Runner
      * Dispatch event, if dispatcher is available.
      *
      * @param SplFileInfo $file
+     * @return void
      */
-    private function fireFileProcessedEvent(SplFileInfo $file)
+    private function fireFileProcessedEvent(SplFileInfo $file): void
     {
         if ($this->dispatcher === null) {
             return;

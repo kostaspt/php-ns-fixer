@@ -19,6 +19,10 @@
         "tightenco/collect": ">=5.7.2 <6.0"
     },
     "require-dev": {
+        "localheinz/phpstan-rules": "^0.7.1",
+        "phpstan/phpstan": "^0.11",
+        "phpstan/phpstan-deprecation-rules": "^0.11.0",
+        "phpstan/phpstan-strict-rules": "^0.11.0",
         "phpunit/phpunit": "^7.5",
         "spatie/phpunit-snapshot-assertions": "^2.0"
     },
@@ -36,6 +40,8 @@
         "bin/php-ns-fixer"
     ],
     "scripts": {
+        "pretty": "prettier --print-width 120 --write './src/**/*.php'; prettier --print-width 120 --write './tests/**/*.php'",
+        "stan": "phpstan analyze -l max src",
         "test": "phpunit -c phpunit.xml.dist"
     },
     "config": {

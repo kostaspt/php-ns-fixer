@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpNsFixer\Fixer;
 
 use Spatie\Regex\Regex;
 use Spatie\Regex\RegexFailed;
 use Symfony\Component\Finder\SplFileInfo;
 
-class Evaluator
+final class Evaluator
 {
     /**
      * Check if the file's namespace is valid.
@@ -37,7 +39,7 @@ class Evaluator
      */
     private function guessNamespaceFromPath(SplFileInfo $file, string $prefix = ''): string
     {
-        $namespace = Regex::replace('/\//', '\\', $file->getRelativePath())->result();
+        $namespace = strval(Regex::replace('/\//', '\\', $file->getRelativePath())->result());
 
         if (mb_strlen($prefix) !== 0) {
             if (mb_strlen($namespace) !== 0) {

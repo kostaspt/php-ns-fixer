@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpNsFixer\Fixer;
 
 use Spatie\Regex\Regex;
 
-class Fixer
+final class Fixer
 {
     public function fix(Result $result): bool
     {
@@ -31,7 +33,7 @@ class Fixer
         $result
             ->getFile()
             ->openFile('w')
-            ->fwrite($content);
+            ->fwrite(strval($content));
 
         return true;
     }

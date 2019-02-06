@@ -1,0 +1,31 @@
+includes:
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+
+rules:
+    - Localheinz\PHPStan\Rules\Closures\NoNullableReturnTypeDeclarationRule
+    - Localheinz\PHPStan\Rules\Closures\NoParameterWithNullableTypeDeclarationRule
+    - Localheinz\PHPStan\Rules\Functions\NoNullableReturnTypeDeclarationRule
+    - Localheinz\PHPStan\Rules\Functions\NoParameterWithNullableTypeDeclarationRule
+    - Localheinz\PHPStan\Rules\Functions\NoParameterWithNullDefaultValueRule
+#    - Localheinz\PHPStan\Rules\Methods\NoConstructorParameterWithDefaultValueRule
+#    - Localheinz\PHPStan\Rules\Methods\NoNullableReturnTypeDeclarationRule
+    - Localheinz\PHPStan\Rules\Methods\NoParameterWithNullableTypeDeclarationRule
+#    - Localheinz\PHPStan\Rules\Methods\NoParameterWithNullDefaultValueRule
+
+services:
+    -
+        class: Localheinz\PHPStan\Rules\Classes\FinalRule
+        arguments:
+            allowAbstractClasses: true
+            classesNotRequiredToBeAbstractOrFinal: []
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Localheinz\PHPStan\Rules\Classes\NoExtendsRule
+        arguments:
+            classesAllowedToBeExtended:
+                - Symfony\Component\Console\Command\Command
+                - Symfony\Component\EventDispatcher\Event
+        tags:
+            - phpstan.rules.rule

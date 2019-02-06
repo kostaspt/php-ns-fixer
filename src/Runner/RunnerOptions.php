@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpNsFixer\Runner;
 
 use Tightenco\Collect\Support\Collection;
@@ -55,7 +57,7 @@ final class RunnerOptions
      */
     public function isSkipEmpty(): bool
     {
-        return (bool) $this->skipEmpty;
+        return $this->skipEmpty;
     }
 
     /**

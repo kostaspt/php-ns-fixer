@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpNsFixer\Console;
 
 use PhpNsFixer\Event\FileProcessedEvent;
@@ -16,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Tightenco\Collect\Support\Collection;
 
-class FixCommand extends Command
+final class FixCommand extends Command
 {
     /**
      * @var ProgressBar
@@ -40,7 +42,9 @@ class FixCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * Configures the current command.
+     *
+     * @return void
      */
     protected function configure()
     {
@@ -58,15 +62,15 @@ class FixCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $files = FileFinder::list($input->getArgument('path'));
+        $files = FileFinder::list(strval($input->getArgument('path')));
 
         $this->progressStart($output, $files);
 
         $runnerOptions = new RunnerOptions(
             $files,
-            $input->getOption('prefix') ?? '',
-            $input->getOption('skip-empty') ?? false,
-            $input->getOption('dry-run') ?? false
+            strval($input->getOption('prefix')) ?? '',
+            boolval($input->getOption('skip-empty')) ?? false,
+            ($dryRun = boolval($input->getOption('dry-run')) ?? false)
         );
         $problematicFiles = (new Runner($runnerOptions, $this->dispatcher))->run();
 
@@ -80,7 +84,7 @@ class FixCommand extends Command
         $output->writeln(
             sprintf(
                 "<options=bold,underscore>There %s %d wrong %s:</>\n",
-                $this->verbForMessage($problematicFiles, $input->getOption('dry-run')),
+                $this->verbForMessage($problematicFiles, $dryRun),
                 $problematicFiles->count(),
                 $problematicFiles->count() !== 1 ? 'namespaces' : 'namespace'
             )
@@ -102,11 +106,10 @@ class FixCommand extends Command
      */
     private function progressStart(OutputInterface $output, Collection $files): void
     {
+        ProgressBar::setFormatDefinition('custom', 'Checking files... %current%/%max% (%filename%)');
+
         $this->progressBar = new ProgressBar($output, $files->count());
-
-        $this->progressBar->setFormatDefinition('custom', 'Checking files... %current%/%max% (%filename%)');
         $this->progressBar->setFormat('custom');
-
         $this->progressBar->start();
     }
 

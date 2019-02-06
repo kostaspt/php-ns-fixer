@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpNsFixer\Fixer;
 
 use Symfony\Component\Finder\SplFileInfo;

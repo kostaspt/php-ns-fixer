@@ -14,21 +14,17 @@ final class Fixer
             return false;
         }
 
-        $regexActualNamespace = '/namespace ' . preg_quote($result->getActual()) . '/';
+        $actualNamespacePattern = '/namespace ' . preg_quote($result->getActual()) . '/';
 
-        if (Regex::matchAll($regexActualNamespace, $result->getFile()->getContents())->hasMatch()) {
-            $content = Regex::replace(
-                $regexActualNamespace,
-                'namespace ' . $result->getExpected(),
-                $result->getFile()->getContents()
-            )->result();
+        if (Regex::matchAll($actualNamespacePattern, $result->getFile()->getContents())->hasMatch()) {
+            $pattern = $actualNamespacePattern;
+            $replacement = 'namespace ' . $result->getExpected();
         } else {
-            $content = Regex::replace(
-                '/<\?php/',
-                "<?php\n\nnamespace " . $result->getExpected() . ';',
-                $result->getFile()->getContents()
-            )->result();
+            $pattern = '/<\?php/';
+            $replacement = "<?php\n\nnamespace " . $result->getExpected() . ';';
         }
+
+        $content = Regex::replace($pattern, $replacement, $result->getFile()->getContents())->result();
 
         $result
             ->getFile()

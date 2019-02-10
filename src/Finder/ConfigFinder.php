@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace PhpNsFixer\Finder;
 
-use Symfony\Component\Finder\Finder as SymfonyFinder;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 final class ConfigFinder
 {
     public static function get(string $path): ?SplFileInfo
     {
-        $finder = SymfonyFinder::create()
+        $finder = Finder::create()
             ->name('composer.json')
             ->in($path)
             ->depth('== 0')

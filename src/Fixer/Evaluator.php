@@ -42,11 +42,7 @@ final class Evaluator
         $namespace = strval(Regex::replace('/\//', '\\', $file->getRelativePath())->result());
 
         if (mb_strlen($prefix) !== 0) {
-            if (mb_strlen($namespace) !== 0) {
-                $namespace = $prefix . '\\' . $namespace;
-            } else {
-                $namespace = $prefix;
-            }
+            $namespace = mb_strlen($namespace) !== 0 ? $prefix . '\\' . $namespace : $prefix;
         }
 
         return $namespace;

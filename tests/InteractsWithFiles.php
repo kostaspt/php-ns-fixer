@@ -9,7 +9,7 @@ trait InteractsWithFiles
 {
     protected $testTempPath;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -18,7 +18,7 @@ trait InteractsWithFiles
         @mkdir($this->testTempPath, 0777, true);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

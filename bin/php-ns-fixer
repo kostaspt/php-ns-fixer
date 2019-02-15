@@ -10,5 +10,6 @@ if (file_exists($autoload = __DIR__ . '/../../../autoload.php')) {
 use Symfony\Component\Console\Application;
 
 $application = new Application('PHP Namespace Fixer');
+$application->add(new \PhpNsFixer\Console\AnalyzeCommand());
 $application->add(new \PhpNsFixer\Console\FixCommand());
 $application->run();

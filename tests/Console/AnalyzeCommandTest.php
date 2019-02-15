@@ -2,14 +2,14 @@
 
 namespace PhpNsFixer\Tests\Console;
 
-use PhpNsFixer\Console\FixCommand;
+use PhpNsFixer\Console\AnalyzeCommand;
 use PhpNsFixer\Tests\InteractsWithFiles;
 use PhpNsFixer\Tests\TestCase;
 use Spatie\Snapshots\MatchesSnapshots;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class FixCommandTest extends TestCase
+class AnalyzeCommandTest extends TestCase
 {
     use InteractsWithFiles, MatchesSnapshots;
 
@@ -49,30 +49,12 @@ EOF;
         $this->doTest();
     }
 
-    /** @test */
-    public function dry_check()
-    {
-        $content = <<<'EOF'
-<?php
-
-namespace Baz;
-
-class Bar {
-    //
-}
-EOF;
-
-        file_put_contents($this->testPath . '/temp/foo/Bar.php', $content);
-
-        $this->doTest(['--dry-run' => true]);
-    }
-
     protected function doTest(array $options = [])
     {
         $application = new Application();
-        $application->add(new FixCommand());
+        $application->add(new AnalyzeCommand());
 
-        $command = $application->find('fix');
+        $command = $application->find('analyze');
         $commandTester = new CommandTester($command);
         $commandTester->execute(array_merge([
             'command' => $command->getName(),

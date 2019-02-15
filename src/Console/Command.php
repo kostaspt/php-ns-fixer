@@ -63,7 +63,7 @@ abstract class Command extends SymfonyCommand
      * @param Collection $problematicFiles
      * @param bool $dryRun
      */
-    protected function printResults(OutputInterface $output, Collection $problematicFiles, bool $dryRun): void
+    protected function printResults(OutputInterface $output, Collection $problematicFiles, bool $dryRun = true): void
     {
         if ($problematicFiles->count() === 0) {
             $output->writeln("<info>No problems found! :)</info>");

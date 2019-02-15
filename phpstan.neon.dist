@@ -25,6 +25,7 @@ services:
         class: Localheinz\PHPStan\Rules\Classes\NoExtendsRule
         arguments:
             classesAllowedToBeExtended:
+                - PhpNsFixer\Console\Command
                 - Symfony\Component\Console\Command\Command
                 - Symfony\Component\EventDispatcher\Event
         tags:

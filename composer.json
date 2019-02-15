@@ -40,7 +40,7 @@
         "bin/php-ns-fixer"
     ],
     "scripts": {
-        "pretty": "prettier --print-width 120 --write './src/**/*.php'; prettier --print-width 120 --write './tests/**/*.php'",
+        "format": "prettier --print-width 120 --write './src/**/*.php'; prettier --print-width 120 --write './tests/**/*.php'",
         "stan": "phpstan analyze -l max src",
         "test": "phpunit -c phpunit.xml.dist"
     },

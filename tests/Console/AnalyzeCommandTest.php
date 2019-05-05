@@ -3,6 +3,7 @@
 namespace PhpNsFixer\Tests\Console;
 
 use PhpNsFixer\Console\AnalyzeCommand;
+use PhpNsFixer\Console\FixCommand;
 use PhpNsFixer\Tests\InteractsWithFiles;
 use PhpNsFixer\Tests\TestCase;
 use Spatie\Snapshots\MatchesSnapshots;
@@ -52,6 +53,7 @@ EOF;
     protected function doTest(array $options = [])
     {
         $application = new Application();
+        $application->add(new FixCommand());
         $application->add(new AnalyzeCommand());
 
         $command = $application->find('analyze');

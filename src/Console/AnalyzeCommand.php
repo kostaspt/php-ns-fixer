@@ -2,9 +2,7 @@
 
 namespace PhpNsFixer\Console;
 
-use PhpNsFixer\Finder\FileFinder;
-use PhpNsFixer\Runner\Runner;
-use PhpNsFixer\Runner\RunnerOptions;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -32,22 +30,20 @@ final class AnalyzeCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $files = FileFinder::list(strval($input->getArgument('path')));
+        $arguments = [
+            'command'   => 'fix',
+            'path'      => $input->getArgument('path'),
+            '--dry-run' => true,
+        ];
 
-        $this->progressStart($output, $files);
+        if ($input->hasOption('prefix')) {
+            $arguments['--prefix'] = $input->getOption('prefix');
+        }
 
-        $runnerOptions = new RunnerOptions(
-            $files,
-            strval($input->getOption('prefix')) ?? '',
-            boolval($input->getOption('skip-empty')) ?? false,
-            true
-        );
-        $problematicFiles = (new Runner($runnerOptions, $this->dispatcher))->run();
+        if ($input->hasOption('skip-empty')) {
+            $arguments['--skip-empty'] = '';
+        }
 
-        $this->progressFinish($output);
-
-        $this->printResults($output, $problematicFiles);
-
-        return $problematicFiles->count();
+        return $this->getApplication()->find('fix')->run(new ArrayInput($arguments), $output);
     }
 }

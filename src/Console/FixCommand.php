@@ -21,7 +21,7 @@ final class FixCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('fix');
+        $this->setName('fix')->setDescription('Fixes a directory');
         $this->setDefinition([
             new InputArgument('path', InputArgument::REQUIRED, 'The path.'),
             new InputOption('prefix', 'P', InputOption::VALUE_REQUIRED, 'Namespace prefix.'),

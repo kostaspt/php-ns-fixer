@@ -19,7 +19,7 @@ final class AnalyzeCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('analyze');
+        $this->setName('analyze')->setDescription('Analyzes a directory');
         $this->setDefinition([
             new InputArgument('path', InputArgument::REQUIRED, 'The path.'),
             new InputOption('prefix', 'P', InputOption::VALUE_REQUIRED, 'Namespace prefix.'),

@@ -3,10 +3,11 @@
 
 require file_exists(__DIR__ . '/../vendor/autoload.php') ? __DIR__ . '/../vendor/autoload.php' : __DIR__ . '/../../../autoload.php';
 
+use Jean85\PrettyVersions;
 use Symfony\Component\Console\Application;
 use PhpNsFixer\Console\{AnalyzeCommand, FixCommand};
 
-$application = new Application('PHP Namespace Fixer');
+$application = new Application('PHP Namespace Fixer', PrettyVersions::getVersion('kostaspt/php-ns-fixer')->getShortVersion());
 $application->add(new AnalyzeCommand());
 $application->add(new FixCommand());
 $application->run();

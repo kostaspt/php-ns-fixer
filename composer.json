@@ -4,6 +4,7 @@
     "type": "application",
     "license": "MIT",
     "keywords": ["namespace"],
+    "version": "2.0.0",
     "authors": [
         {
             "name": "Konstantinos Pittas",
@@ -12,6 +13,7 @@
     ],
     "require": {
         "php": ">=7.2",
+        "jean85/pretty-package-versions": "^1.2",
         "spatie/regex": "^1.4",
         "symfony/console": "^4.2",
         "symfony/event-dispatcher": "^4.2",

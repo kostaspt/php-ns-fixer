@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.2",
         "spatie/regex": "^1.4",
         "symfony/console": "^4.2",
         "symfony/event-dispatcher": "^4.2",

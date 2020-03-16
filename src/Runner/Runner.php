@@ -83,6 +83,6 @@ final class Runner
             return;
         }
 
-        $this->dispatcher->dispatch(FileProcessedEvent::class, new FileProcessedEvent($file));
+        $this->dispatcher->dispatch(new FileProcessedEvent($file), FileProcessedEvent::class);
     }
 }

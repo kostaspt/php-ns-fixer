@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace PhpNsFixer\Event;
 
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Finder\SplFileInfo;
 
-final class FileProcessedEvent extends Event
+final class FileProcessedEvent
 {
     /**
      * @var SplFileInfo

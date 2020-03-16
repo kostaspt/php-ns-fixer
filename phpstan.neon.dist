@@ -3,26 +3,26 @@ includes:
     - vendor/phpstan/phpstan-strict-rules/rules.neon
 
 rules:
-    - Localheinz\PHPStan\Rules\Closures\NoNullableReturnTypeDeclarationRule
-    - Localheinz\PHPStan\Rules\Closures\NoParameterWithNullableTypeDeclarationRule
-    - Localheinz\PHPStan\Rules\Functions\NoNullableReturnTypeDeclarationRule
-    - Localheinz\PHPStan\Rules\Functions\NoParameterWithNullableTypeDeclarationRule
-    - Localheinz\PHPStan\Rules\Functions\NoParameterWithNullDefaultValueRule
-#    - Localheinz\PHPStan\Rules\Methods\NoConstructorParameterWithDefaultValueRule
-#    - Localheinz\PHPStan\Rules\Methods\NoNullableReturnTypeDeclarationRule
-    - Localheinz\PHPStan\Rules\Methods\NoParameterWithNullableTypeDeclarationRule
-#    - Localheinz\PHPStan\Rules\Methods\NoParameterWithNullDefaultValueRule
+    - Ergebnis\PHPStan\Rules\Closures\NoNullableReturnTypeDeclarationRule
+    - Ergebnis\PHPStan\Rules\Closures\NoParameterWithNullableTypeDeclarationRule
+    - Ergebnis\PHPStan\Rules\Functions\NoNullableReturnTypeDeclarationRule
+    - Ergebnis\PHPStan\Rules\Functions\NoParameterWithNullableTypeDeclarationRule
+    - Ergebnis\PHPStan\Rules\Functions\NoParameterWithNullDefaultValueRule
+#    - Ergebnis\PHPStan\Rules\Methods\NoConstructorParameterWithDefaultValueRule
+#    - Ergebnis\PHPStan\Rules\Methods\NoNullableReturnTypeDeclarationRule
+    - Ergebnis\PHPStan\Rules\Methods\NoParameterWithNullableTypeDeclarationRule
+#    - Ergebnis\PHPStan\Rules\Methods\NoParameterWithNullDefaultValueRule
 
 services:
     -
-        class: Localheinz\PHPStan\Rules\Classes\FinalRule
+        class: Ergebnis\PHPStan\Rules\Classes\FinalRule
         arguments:
             allowAbstractClasses: true
             classesNotRequiredToBeAbstractOrFinal: []
         tags:
             - phpstan.rules.rule
     -
-        class: Localheinz\PHPStan\Rules\Classes\NoExtendsRule
+        class: Ergebnis\PHPStan\Rules\Classes\NoExtendsRule
         arguments:
             classesAllowedToBeExtended:
                 - PhpNsFixer\Console\Command

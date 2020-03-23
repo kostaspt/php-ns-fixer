@@ -17,7 +17,7 @@
         "spatie/regex": "^1.4",
         "symfony/console": "^5.0",
         "symfony/event-dispatcher": "^5.0",
-        "symfony/finder": "^4.4",
+        "symfony/finder": "^5.0",
         "tightenco/collect": "^7.1"
     },
     "require-dev": {

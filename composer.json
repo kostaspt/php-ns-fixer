@@ -18,7 +18,7 @@
         "symfony/console": "^5.0",
         "symfony/event-dispatcher": "^5.0",
         "symfony/finder": "^5.0",
-        "tightenco/collect": "^7.1"
+        "tightenco/collect": "^8.17"
     },
     "require-dev": {
         "ergebnis/phpstan-rules": "^0.14",

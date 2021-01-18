@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": "^7.4",
-        "jean85/pretty-package-versions": "^1.2",
+        "jean85/pretty-package-versions": "^2.0",
         "spatie/regex": "^1.4",
         "symfony/console": "^5.0",
         "symfony/event-dispatcher": "^5.0",
